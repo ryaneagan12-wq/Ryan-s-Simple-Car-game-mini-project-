@@ -6,8 +6,8 @@ import random
 class Players(pygame.sprite.Sprite):
     def __init__(self,image_name,x,y,speed,width,height):
         super().__init__()
-        self.img = pygame.image.load(f"car files/{image_name}")
-        self.rect = self.img.get_rect(topleft =(x,y))
+        self.image = pygame.image.load(f"car files/{image_name}")
+        self.rect = self.image.get_rect(topleft=(x, y))
         self.speed = speed
         self.width = width
         self.height = height
@@ -34,8 +34,8 @@ class Players(pygame.sprite.Sprite):
 class Enemy(pygame.sprite.Sprite):
     def __init__(self,image_name,x,y,speed,width,height):
         super().__init__()
-        self.img = pygame.image.load(f"Opponent files/{image_name}")
-        self.rect = self.img.get_rect(topleft = (x,y))
+        self.image = pygame.image.load(f"Opponent files/{image_name}")
+        self.rect = self.image.get_rect(topleft = (x,y))
         self.speed = speed
         self.width = width
         self.height = height
@@ -61,8 +61,10 @@ screen_Height = 1200
 screen_img = pygame.image.load("game_title.png")
 screen = pygame.display.set_mode((screen_Width,screen_Height))
 road = pygame.image.load("Road.png")
-screen = pygame.display.set_mode((screen_Width, screen_Height))
+choose_image = pygame.image.load("choose_screen .png")
+calm_musik = pygame.mixer.Sound("Dreamspeedrun.mp3")
 pygame.display.set_caption("Ryan's Car Game")
+calm_musik.play(-1)
 clock = pygame.time.Clock()
 
 #color + font
@@ -71,26 +73,26 @@ BLACK = (0, 0, 0)
 font = pygame.font.SysFont("Arial", 30, bold=True)
 
 #rect for each button 
-Startbutton_rect = pygame.Rect(972,572,416,85)
-Choosecarbutton_rect = pygame.Rect(972,674,416,85)
-Exitbutton_rect = pygame.Rect(972,790,416,85)
+Startbutton_rect = pygame.Rect(765,540,416,85)
+Choosecarbutton_rect = pygame.Rect(765,640,416,85)
+Exitbutton_rect = pygame.Rect(765,740,416,85)
 
-Mclaren_Button = pygame.Rect(200,200,269,97)
-Buggati_Button = pygame.Rect(400,200,318,105)
-Lambo_Button = pygame.Rect(600,200,324,180)
-Porsche_Button = pygame.Rect(800,200,302,101)
+Mclaren_Button = pygame.Rect(440,370,269,97)
+Buggati_Button = pygame.Rect(690,440,282,93)
+Lambo_Button = pygame.Rect(980,430,254,142)
+Porsche_Button = pygame.Rect(1270,440,254,85)
 
 #player attributes 
 Players_group = pygame.sprite.Group()
-Mclaren = Players("mclaren.png",200,200,85,269,97)
-Buggati = Players("Buggati.png",400,200,90,318,105)
-Lambo = Players("Lamborghini.png",600,200,70,324,180)
-Porsche = Players("Porsche.png",800,200,80,302,101)
+Mclaren = Players("mclaren.png",400,440,45,269,97)
+Buggati = Players("Buggati.png",690,440,50,282,93)
+Lambo = Players("Lamborghini.png",980,430,20,254,142)
+Porsche = Players("Porsche.png",1270,440,35,254,85)
 Players_group.add(Mclaren,Buggati,Lambo,Porsche)
 
 #enemy attributes
 Enemy_group = pygame.sprite.Group()
-Stop = Enemy("Stop.png",random.randint(0, screen_Width - 133),random.randint(0, screen_Height - 370),100,133,379)
+Stop = Enemy("Stop.png",random.randint(0, screen_Width - 133),random.randint(0, screen_Height - 370),200,133,379)
 Enemy_group.add(Stop)
 
 #game state
@@ -125,7 +127,7 @@ while running:
         screen.blit(screen_img, (0,0))
         if mouse_pos:
             if Startbutton_rect.collidepoint(mouse_pos):
-                if choose == 0:
+                if choose != 0:
                     reset()
                     state = "play"
             elif Choosecarbutton_rect.collidepoint(mouse_pos):
@@ -136,6 +138,7 @@ while running:
 
     elif state == "choose":
         screen.fill(BLACK)
+        screen.blit(choose_image, (330,200))
         Players_group.draw(screen)
 
         if mouse_pos:
@@ -155,7 +158,7 @@ while running:
         screen.blit(road,(0,0))
             
         choose.update()
-        screen.blit(choose.img, choose.rect)
+        screen.blit(choose.image, choose.rect)
 
         Enemy_group.update()
         Enemy_group.draw(screen)
@@ -170,8 +173,6 @@ while running:
         message_y = 200
         screen.blit(score_surf, (message_x,message_y))
     #game restart display    
-        if keys[pygame.K_ESCAPE]:
-            state = "menu"
 
     
     elif state == "game over":
@@ -191,7 +192,9 @@ while running:
         if keys[pygame.K_r]:
             reset()
             state = "play"
-        
+        elif keys[pygame.K_ESCAPE]:
+            state = "menu"
+
 
 #end
     pygame.display.flip()
