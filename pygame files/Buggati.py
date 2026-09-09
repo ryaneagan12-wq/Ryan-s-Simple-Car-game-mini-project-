@@ -46,20 +46,20 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        keys = pygame.key.get_pressed()
-        if not game_over:
-            if keys[pygame.K_UP] or keys[pygame.K_w]:
-                if player_y > 0:    
-                    player_y -= player_speed           
-            if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-                if player_x > 0:
-                    player_x -= player_speed
-            if keys[pygame.K_DOWN] or keys[pygame.K_s]:
-                if player_y < SCREEN_HEIGHT - player_height:
-                    player_y += player_speed
-            if keys[pygame.K_RIGHT] or keys[pygame.K_d] :
-                if player_x < SCREEN_WIDTH - player_height:
-                    player_x += player_speed
+    keys = pygame.key.get_pressed()
+    if not game_over:
+        if keys[pygame.K_UP] or keys[pygame.K_w]:
+            if player_y > 0:    
+                player_y -= player_speed           
+                if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                    if player_x > 0:
+                        player_x -= player_speed
+                        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+                            if player_y < SCREEN_HEIGHT - player_height:
+                                player_y += player_speed
+                                if keys[pygame.K_RIGHT] or keys[pygame.K_d] :
+                                    if player_x < SCREEN_WIDTH - player_height:
+                                        player_x += player_speed
         
         if not game_over:
             enemy_y += enemy_speed
